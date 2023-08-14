@@ -31,8 +31,8 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     dt = 0
 
-    mouse_pos_x = None
-    mouse_pos_y = None
+    mouse_pos_x = 0
+    mouse_pos_y = 0
 
     while True:
         # poll for events
