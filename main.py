@@ -1,44 +1,73 @@
-# Example file showing a circle moving on screen
 import pygame
+import sys
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-pygame.display.set_caption('Orange Cat Cube')
-clock = pygame.time.Clock()
-running = True
-dt = 0
+FPS = 60  # frames per second, the general speed of the program
+WINDOW_WIDTH = 1280  # size of window's width in pixels
+WINDOW_HEIGHT = 720  # size of windows' height in pixels
+WINDOW_TITLE = 'Orange Cat Cube'  # title that appears in the window title bar
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+# set up the colors (RGB values)
+WHITE = (255, 240, 210)
+BLACK = (63, 50, 44)
+ORANGE = (255, 162, 63)
+PURPLE = (155, 93, 229)
+RED = (241, 91, 181)
+YELLOW = (254, 228, 64)
+BLUE = (0, 187, 249)
+CYAN = (0, 245, 212)
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+SCREEN_BACKGROUND_COLOR = ORANGE
+CUBE_COLORS = (PURPLE, RED, YELLOW, BLUE, CYAN)
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+if __name__ == '__main__':
+    # pygame setup
+    pygame.init()
 
-    pygame.draw.circle(screen, "red", player_pos, 40)
+    # set up the window
+    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    pygame.display.set_caption(WINDOW_TITLE)
 
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
+    # run the game loop
+    clock = pygame.time.Clock()
+    dt = 0
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
+    mouse_pos_x = None
+    mouse_pos_y = None
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
-    dt = clock.tick(60) / 1000
+    while True:
+        # poll for events
+        # pygame.QUIT event means the user clicked X to close your window
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEMOTION:
+                mouse_pos_x, mouse_pos_y = event.pos
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos_x, mouse_pos_y = event.pos
+            elif event.type == pygame.MOUSEBUTTONUP:
+                mouse_pos_x, mouse_pos_y = event.pos
 
-pygame.quit()
+        # fill the screen with a color to wipe away anything from last frame
+        screen.fill(SCREEN_BACKGROUND_COLOR)
+
+        player_pos = pygame.Vector2(mouse_pos_x, mouse_pos_y)
+        pygame.draw.circle(screen, BLACK, player_pos, 40)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            player_pos.y -= 300 * dt
+        if keys[pygame.K_s]:
+            player_pos.y += 300 * dt
+        if keys[pygame.K_a]:
+            player_pos.x -= 300 * dt
+        if keys[pygame.K_d]:
+            player_pos.x += 300 * dt
+
+        # flip() the display to put your work on screen
+        pygame.display.flip()
+
+        # limits FPS to 60
+        # dt is delta time in seconds since last frame, used for framerate-
+        # independent physics.
+        dt = clock.tick(FPS) / 1000
